@@ -3,18 +3,13 @@
 let playerx = 250;
 let playery = 295;
 
-
+let color;
 
 //define start game function, draws the players ship on screen, defines the canvas\
 //have to do in seperate function otherwise it initiates before color is set from addeventlistener
 //called inside eventlistener after color is selected
-
-
-function startGame(){
-    //define canvas
-    const canvas = document.getElementById('canvas')
-    const ctx = canvas.getContext('2d');
-    //clear the rect each time function is loaded (each interval)
+function startGame(shootBullet){
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     //define player ship class
     class Ship {
@@ -46,34 +41,27 @@ function startGame(){
     }
     let playerShip = new Ship(playerx, playery, color);
     playerShip.draw(ctx)
+ 
+
     
-   
-    document.addEventListener('keyown', playerShoot) 
-    function playerShoot(e) {
-        console.log(e)    
-        if (e.key == ' ') {
-            shootBullet(ctx)
-        }
-    }
+    
 
 }
-//define bullet speed
+
+//call function upon spacebar press
 const bulletVelocity = 20;
-const bulletStartY = playery - 38.5
-const bulletStartX = playerx 
 const bulletWidth = 3
 const bulletHeight = 6
-//call function upon spacebar press
-
-
-
+let bulletStartY = playery - 38.5
+    let bulletStartX = playerx 
+    bulletStartY += 5
 //shoot function
-function shootBullet(ctx) {
+function shootBullet() {
     class Bullet {
         constructor(x, y, color) {
-            x = this.x
-            y = this.y
-            color = this.color
+            this.x = x
+            this.y = y
+            this.color = color
         }
     
         draw(ctx){
@@ -83,18 +71,21 @@ function shootBullet(ctx) {
             ctx.lineTo(this.x + bulletWidth, this.y + bulletHeight)
             ctx.lineTo(this.x, this.y + bulletHeight)
             ctx.lineTo(this.x, this.y)
-            ctx.fillStyle = this.color
+            ctx.fillStyle = 'red'
             ctx.fill()
             ctx.closePath()
         }
+        
     }
 
-    let playerBullet = new Bullet(bulletStartX,bulletStartY, color) 
+    let playerBullet = new Bullet(bulletStartX, bulletStartY, color) 
     playerBullet.draw(ctx)
+    console.log('shoot')  
+    if (this.x < 300) {
+        this.x += 5
+    } 
     
 }
-
-    
 
 
 //define players movement with arrow keys
@@ -112,10 +103,10 @@ function playerMovement(e) {
         }
 }
 
-//player shoot function
-
-
-
-
-
-
+   
+   
+document.addEventListener('keydown',  (e) => {
+    if (e.key == ' ') {
+    shootBullet()
+    }
+})
