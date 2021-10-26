@@ -34,17 +34,17 @@
 #colors.hidden{
     display: none;
 }
-.colorSelect#blue{
-    background-color: darkblue;
+.colorSelect#cadetblue{
+    background-color: cadetblue;
 }
-.colorSelect#red{
-    background-color:#b22222;
+.colorSelect#firebrick{
+    background-color: firebrick;
 }
-.colorSelect#green{
-    background-color: rgb(31, 201, 31);
+.colorSelect#lightgreen{
+    background-color: lightgreen;
 }
-.colorSelect#yellow{
-    background-color: rgb(214, 214, 47);
+.colorSelect#gold{
+    background-color: gold;
 }
 
 .colorSelect:hover{
