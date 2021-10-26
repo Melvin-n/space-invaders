@@ -4,9 +4,6 @@ let playerx = 250;
 let playery = 295;
 let color;
 
-
-
-
 //attack flag checks if bullet is on screen, if set to true, bullet will travel. by is bullet y coordinate, will decrement if attack is true
 let attack = false
 let by = playery - 38.5
@@ -17,7 +14,8 @@ const bulletHeight = 6
 let bulletStartY = playery
 let bulletStartX = playerx 
 
-
+let enemyPositionX = 100
+let enemyPositionY = 100
 //dstart game function, draws the players ship on screen, defines the canvas\
 
 function startGame(){
@@ -27,6 +25,7 @@ function startGame(){
     
     let playerShip = new Ship(playerx, playery, color);
     playerShip.draw(ctx)
+    drawEnemy()
 
     if (pressLeft == true  && playerx >= 25) {
         playerx -= 5
@@ -42,24 +41,27 @@ function startGame(){
         bulletFired.draw(ctx)
         console.log(by)
         console.log(bulletFired.y)
+
+        if (bulletFired.x < enemyArray[0].x && bulletFired.x > (enemyArray[0].x - 30) && bulletFired.y > enemyArray[0].y && bulletFired.y < (enemyArray[0].y + 20)) {
+                
+            console.log('hittttttttttttttttttttttt')
+        }
         if (bulletFired.y < 0) {
             attack = false
             console.log(bulletFired)
             bulletFired = null;
         }
     }
-    if (attack == true){
         
+    if (attack == true){
             by -= 5;
     } else {
         by = playery;
         pressSpace = false
         bulletStartX = playerx 
-    }
-    
+    }  
     
 }
-
 
 //define player class
 class Ship {
@@ -86,6 +88,8 @@ class Ship {
         ctx.lineTo(this.x, this.y)
         ctx.fillStyle = color
         ctx.fill();
+        ctx.fillStyle = 'black'
+        ctx.stroke()
         ctx.closePath()
     }
 }
@@ -137,5 +141,38 @@ function keyUpHandler(e) {
     } else if(e.key == 'ArrowRight') {
         pressRight = false
     }
+}
+
+
+
+class Enemy {
+    constructor(x, y){
+        this.x = x
+        this.y = y
+    }
+
+    draw(ctx) {
+        ctx.beginPath()
+        ctx.moveTo(this.x, this.y)
+        ctx.lineTo(this.x - 30, this.y)
+        ctx.lineTo(this.x - 30, this.y - 20)
+        ctx.lineTo(this.x, this.y - 20)
+        ctx.lineTo(this.x, this.y)
+        ctx.fillStyle = 'purple'
+        ctx.fill()
+        ctx.fillStyle = 'black'
+        ctx.stroke()
+
+    }
+}
+let enemyArray = []
+function drawEnemy() {
+    for (let i = 0; i < 5; i++) {
+        enemyArray[i] = new Enemy(enemyPositionX, enemyPositionY)
+        enemyArray[i].draw(ctx)
+        enemyPositionX += 50
+        //return enemyArray[i]
+    }
+    enemyPositionX = 100
 }
 
