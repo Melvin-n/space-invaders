@@ -15,7 +15,7 @@ let bulletStartY = playery
 let bulletStartX = playerx 
 
 let enemyPositionX = 100
-let enemyPositionY = 100
+let enemyPositionY = 50
 //dstart game function, draws the players ship on screen, defines the canvas\
 
 function startGame(){
@@ -26,6 +26,9 @@ function startGame(){
     let playerShip = new Ship(playerx, playery, color);
     playerShip.draw(ctx)
     drawEnemy()
+    enemyPositionX += 10
+
+    
 
     if (pressLeft == true  && playerx >= 25) {
         playerx -= 5
@@ -35,18 +38,20 @@ function startGame(){
     }
     
     if (pressSpace == true) {
+        console.log(enemyArray)
+
         attack = true
         console.log('shoot')
         let bulletFired = new Bullet(bulletStartX, by, color)
         bulletFired.draw(ctx)
         console.log(by)
         console.log(bulletFired.y)
-
-        if (bulletFired.x < enemyArray[0].x && bulletFired.x > (enemyArray[0].x - 30) && bulletFired.y > enemyArray[0].y && bulletFired.y < (enemyArray[0].y + 20)) {
-                
+        
+        if (checkHit(bulletFired, enemyArray)) {
             console.log('hittttttttttttttttttttttt')
-        }
-        if (bulletFired.y < 0) {
+            bulletFired = null
+            attack = false
+        } else if (bulletFired.y < 0) {
             attack = false
             console.log(bulletFired)
             bulletFired = null;
@@ -61,8 +66,18 @@ function startGame(){
         bulletStartX = playerx 
     }  
     
+
 }
 
+function checkHit(bulletFired, enemyArray) {
+    for (let enemy of enemyArray){
+        console.log(enemy)
+        if (bulletFired.x < enemy.x && bulletFired.x > (enemy.x - 30) && bulletFired.y < (enemy.y) && bulletFired.y > enemy.y - 20) {
+            enemy.alive = false
+            return true
+        }
+    }
+}
 //define player class
 class Ship {
     constructor(x, y, color) {
@@ -146,9 +161,10 @@ function keyUpHandler(e) {
 
 
 class Enemy {
-    constructor(x, y){
+    constructor(x, y, alive){
         this.x = x
         this.y = y
+        this.alive = alive
     }
 
     draw(ctx) {
@@ -166,13 +182,39 @@ class Enemy {
     }
 }
 let enemyArray = []
-function drawEnemy() {
-    for (let i = 0; i < 5; i++) {
-        enemyArray[i] = new Enemy(enemyPositionX, enemyPositionY)
-        enemyArray[i].draw(ctx)
-        enemyPositionX += 50
-        //return enemyArray[i]
-    }
-    enemyPositionX = 100
-}
 
+function createEnemy() {
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 5; j++) {
+            enemyArray.push(new Enemy(enemyPositionX, enemyPositionY, true))
+            enemyPositionX += 80
+        }
+        enemyPositionX = 100
+        enemyPositionY += 30
+    }
+    //enemyPositionX = 100
+}
+console.log(enemyArray)
+createEnemy()
+
+
+function drawEnemy() {
+    for (let enemy of enemyArray) {
+        
+        if (enemy.alive) {
+            
+            enemy.draw(ctx)
+        }
+    }
+    if (enemyArray[0].x < 80) {
+        for (let enemy of enemyArray) {
+            enemy.x += 200
+        } 
+    }
+    else if (enemyArray[0].x > 79) {
+        for (let enemy of enemyArray) {
+            enemy.x -= 200
+        } 
+    }
+    
+}
