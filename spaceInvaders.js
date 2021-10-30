@@ -16,48 +16,49 @@ let bulletStartX = playerx
 
 let enemyPositionX = 100
 let enemyPositionY = 50
+
+const enemySpeed = 1
+const enemyRows = 4
+const enemyCols = 1 
 //dstart game function, draws the players ship on screen, defines the canvas\
 
 function startGame(){
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    //clear the screen every startgame interval
+    clearRect(0, 0, canvas.width, canvas.height)
     //define player ship class
     
+    //define new instance of Ship class - this will be the players ship
     let playerShip = new Ship(playerx, playery, color);
+    //call playership.draw and drawenemy to draw enemys and player on screen
     playerShip.draw(ctx)
-    drawEnemy()
-    enemyPositionX += 10
+    drawEnemy()    
 
-    
-
+    //check for player movement flags. these functions have been called outside startGame as calling inside results in multiple presses at once
     if (pressLeft == true  && playerx >= 25) {
         playerx -= 5
     }
     if (pressRight == true && playerx <=475) {
         playerx += 5
     }
-    
+    //similair, to movement, check for attack function initiated when spacebar pressdown is true
     if (pressSpace == true) {
-        console.log(enemyArray)
-
+        //change attack to true, this will initiate bullets movement
         attack = true
-        console.log('shoot')
-        let bulletFired = new Bullet(bulletStartX, by, color)
+        //create new bullet (only one bullet can be on the screen at a time)
+        let bulletFired = new Bullet(bulletStartX, by)
         bulletFired.draw(ctx)
-        console.log(by)
-        console.log(bulletFired.y)
         
+        //check for a collision between bullet and enemy. if so, remove the bullet
         if (checkHit(bulletFired, enemyArray)) {
-            console.log('hittttttttttttttttttttttt')
             bulletFired = null
             attack = false
         } else if (bulletFired.y < 0) {
+            //if bullet reaches top of screen, also delete it
             attack = false
-            console.log(bulletFired)
             bulletFired = null;
         }
     }
-        
+    //while attack is true, move the bullets y position by 5 each interval. else reset position back to default
     if (attack == true){
             by -= 5;
     } else {
@@ -65,10 +66,19 @@ function startGame(){
         pressSpace = false
         bulletStartX = playerx 
     }  
-    
-
+    //check position of enemy for lose condition
+    for (let enemy of enemyArray) {
+        if (enemy.y > 230) {
+            gameOverLose()
+        } 
+    }
+    //check amount of enemys on screen for win condition
+    if (enemyArray.length == 0){
+        gameOverWin()
+    }
 }
 
+//check hit will check if the bullet is in the same x, y coordinates as an enemy ship
 function checkHit(bulletFired, enemyArray) {
     for (let enemy of enemyArray){
         console.log(enemy)
@@ -77,15 +87,17 @@ function checkHit(bulletFired, enemyArray) {
             return true
         }
     }
+    
+    
 }
-//define player class
+//define player class, passing coordinates and color
 class Ship {
     constructor(x, y, color) {
         this.y = y;
         this.x = x;
         this.color = color
     }
-    //draw the ship
+    //ship drawing
     draw(ctx){
         ctx.beginPath()
         ctx.moveTo(this.x, this.y)
@@ -108,15 +120,15 @@ class Ship {
         ctx.closePath()
     }
 }
-//define bullet class
+//define bullet class, passing coordinates 
 class Bullet {
-    constructor(x, y, color) {
+    constructor(x, y) {
         this.x = x
         this.y = y
-        this.color = color
-        //bulletsAvail.push(this)
+ 
     }
-
+    
+    //bullet class
     draw(ctx){
         ctx.beginPath()
         ctx.moveTo(this.x, this.y)
@@ -131,6 +143,7 @@ class Bullet {
     
 }
 
+setInterval(movement, 200)
 
 
 //movement and bullets. keyhandlers
@@ -140,6 +153,7 @@ let pressSpace =  false
 document.addEventListener('keydown', keyDownHandler)
 document.addEventListener('keyup', keyUpHandler)
 
+//use boolean flags to check for key presses. if the key is pressed, the flag is true, when its let go, returns to false
 function keyDownHandler(e) {
     if(e.key == 'ArrowLeft') {
         pressLeft = true
@@ -159,14 +173,13 @@ function keyUpHandler(e) {
 }
 
 
-
+//define enemy class, passing in coordinates and alive bool flag
 class Enemy {
     constructor(x, y, alive){
         this.x = x
         this.y = y
         this.alive = alive
     }
-
     draw(ctx) {
         ctx.beginPath()
         ctx.moveTo(this.x, this.y)
@@ -181,40 +194,56 @@ class Enemy {
 
     }
 }
+//define enemy array to hold all the current enemies on screen
 let enemyArray = []
 
+//create enemy function, pushes each enemy into array using a loop, each enemies position changes from the previous 
 function createEnemy() {
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 5; j++) {
+    for (let i = 0; i < enemyRows; i++) {
+        for (let j = 0; j < enemyCols; j++) {
             enemyArray.push(new Enemy(enemyPositionX, enemyPositionY, true))
-            enemyPositionX += 80
+            enemyPositionX += 65
         }
-        enemyPositionX = 100
         enemyPositionY += 30
+        enemyPositionX = 100
+
     }
-    //enemyPositionX = 100
 }
-console.log(enemyArray)
+
+//create enemies
 createEnemy()
 
-
+//draw the enemies if their alive status is true, else if it's false, remove them from the array
 function drawEnemy() {
-    for (let enemy of enemyArray) {
-        
-        if (enemy.alive) {
-            
+    for (let enemy of enemyArray) {       
+        if (enemy.alive) {          
             enemy.draw(ctx)
+        } else {
+            enemyArray.splice(enemyArray.indexOf(enemy), 1)
         }
+    }   
+}
+
+//move the enemies along y axis
+function movement() {
+    for (let enemy of enemyArray){
+        enemy.y += enemySpeed
     }
-    if (enemyArray[0].x < 80) {
-        for (let enemy of enemyArray) {
-            enemy.x += 200
-        } 
-    }
-    else if (enemyArray[0].x > 79) {
-        for (let enemy of enemyArray) {
-            enemy.x -= 200
-        } 
-    }
+ 
+}
+
+//change display screen for win or loss
+let gameOverLose = () => {
+    gameScreen.innerHTML = `
+    <h1> You lose! </h1>
+    <h3> The aliens have invaded.... </h3>
+    `
     
+}
+
+let gameOverWin = () => {
+    gameScreen.innerHTML = `
+    <h1> You win! </h1>
+    <h3> You defeated the aliens, your planet is safe.... for now. </h3>
+    `
 }
