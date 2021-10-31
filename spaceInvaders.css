@@ -57,36 +57,56 @@
 }
 
 /* MANUAL PAGE STYLING */
+body .dark{
+    background-color: black;
+    color: whitesmoke;
+}
 
-/* #pageContainer{
-    display: flex;
-    justify-content: center;
-} */
 #manualContainer {
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
-    margin-left: 100px;
+    align-items: center;
+    margin-left: 350px;
     font-family: 'Urbanist', sans-serif;
-    border: 2px blue solid
 }
 
 
-#navbar {
-    height: 100%;
+#nav {
+    height: 100vh;
     width: 25%;
-    position: fixed;
     top: 0;
     left: 0;
-    background-color: black;
-    color:white;
+    position: fixed;
+    flex-direction: column;
     font-family: 'Urbanist', sans-serif;
+    background-color: rgba(0, 0, 0, 0.445);
+    align-items: center;
 }
 
-li {
-    padding:30px;
+#nav li {
+    padding:20px 0;
     font-size: 18px;
+    
+}
+
+#nav li a {
+    text-decoration: none;
+    color: black;
+}
+
+#nav li a:hover {
+    font-size: 20px;
+}
+
+#navhead {
+    padding-top: 10px;
+}
+
+h2 {
+    text-decoration: underline;
+    padding-top: 40px;
+}
+
+h1 {
+    text-decoration: underline;
 }
 
 
