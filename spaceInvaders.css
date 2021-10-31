@@ -56,3 +56,37 @@
     display: none;
 }
 
+/* MANUAL PAGE STYLING */
+
+/* #pageContainer{
+    display: flex;
+    justify-content: center;
+} */
+#manualContainer {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
+    margin-left: 100px;
+    font-family: 'Urbanist', sans-serif;
+    border: 2px blue solid
+}
+
+
+#navbar {
+    height: 100%;
+    width: 25%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    color:white;
+    font-family: 'Urbanist', sans-serif;
+}
+
+li {
+    padding:30px;
+    font-size: 18px;
+}
+
+

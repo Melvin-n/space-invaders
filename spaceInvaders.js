@@ -24,7 +24,8 @@ const enemyCols = 1
 
 function startGame(){
     //clear the screen every startgame interval
-    clearRect(0, 0, canvas.width, canvas.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
     //define player ship class
     
     //define new instance of Ship class - this will be the players ship
@@ -115,7 +116,7 @@ class Ship {
         ctx.lineTo(this.x, this.y)
         ctx.fillStyle = color
         ctx.fill();
-        ctx.fillStyle = 'black'
+        ctx.strokeStyle = 'black'
         ctx.stroke()
         ctx.closePath()
     }
@@ -187,9 +188,9 @@ class Enemy {
         ctx.lineTo(this.x - 30, this.y - 20)
         ctx.lineTo(this.x, this.y - 20)
         ctx.lineTo(this.x, this.y)
-        ctx.fillStyle = 'purple'
+        ctx.fillStyle = 'white'
         ctx.fill()
-        ctx.fillStyle = 'black'
+        ctx.strokeStyle = 'green'
         ctx.stroke()
 
     }
