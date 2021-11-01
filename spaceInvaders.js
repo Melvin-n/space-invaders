@@ -1,3 +1,23 @@
+//intiate constants of start menu and canvas
+const gameScreen = document.querySelector('#gameScreen')
+const colors = document.querySelector('#colors')
+const canvas = document.getElementById('canvas')
+const colorHeader = document.getElementById('colorHeader')
+const colorSelect = document.getElementById('colors')
+const ctx = canvas.getContext('2d');
+//upon color selection, save the color and change screen to game canvas
+colors.addEventListener('click', (e) => {
+    if (e.target.id != 'colors') {
+    color = e.target.id
+    console.log(color)
+    canvas.classList.remove('hidden')
+    colorHeader.classList.add('hidden')
+    colorSelect.classList.add('hidden')
+
+    //start the game, run the startgame function every 10ms i.e game refresh rate
+    setInterval(startGame, 20);
+    }
+})
 
 //define players constants
 let playerx = 250;
@@ -19,7 +39,7 @@ let enemyPositionY = 50
 
 const enemySpeed = 1
 const enemyRows = 4
-const enemyCols = 1 
+const enemyCols = 6 
 //dstart game function, draws the players ship on screen, defines the canvas\
 
 function startGame(){
@@ -32,8 +52,9 @@ function startGame(){
     let playerShip = new Ship(playerx, playery, color);
     //call playership.draw and drawenemy to draw enemys and player on screen
     playerShip.draw(ctx)
-    drawEnemy()    
-
+    drawEnemy()  
+    drawBarrier()
+    
     //check for player movement flags. these functions have been called outside startGame as calling inside results in multiple presses at once
     if (pressLeft == true  && playerx >= 25) {
         playerx -= 5
@@ -78,6 +99,16 @@ function startGame(){
         gameOverWin()
     }
 }
+
+function drawBarrier() {
+    ctx.beginPath()
+    ctx.moveTo(0, 230)
+    ctx.lineTo(500, 230)
+    ctx.strokeStyle = 'rgba(0, 100, 255, 0.3)'
+    ctx.stroke()
+    ctx.closePath()
+}
+
 
 //check hit will check if the bullet is in the same x, y coordinates as an enemy ship
 function checkHit(bulletFired, enemyArray) {
@@ -188,7 +219,7 @@ class Enemy {
         ctx.lineTo(this.x - 30, this.y - 20)
         ctx.lineTo(this.x, this.y - 20)
         ctx.lineTo(this.x, this.y)
-        ctx.fillStyle = 'white'
+        ctx.fillStyle = 'darkslategrey'
         ctx.fill()
         ctx.strokeStyle = 'green'
         ctx.stroke()
@@ -247,4 +278,22 @@ let gameOverWin = () => {
     <h1> You win! </h1>
     <h3> You defeated the aliens, your planet is safe.... for now. </h3>
     `
+}
+
+const body = document.body;
+let isDark = false
+let darkModeButton = document.getElementById('darkMode')
+
+function darkMode() {
+    if (!isDark) {
+        body.classList.add('dark')
+        gameScreen.classList.add('dark')
+        darkModeButton.innerHTML = 'Dark mode'
+        isDark = true
+    } else {
+        body.classList.remove('dark')
+        gameScreen.classList.remove('dark') 
+        darkModeButton.innerHTML = 'Light mode'
+        isDark = false
+    }
 }

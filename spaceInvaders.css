@@ -14,8 +14,37 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-bottom: 10px;
 }
 
+#gameScreen.dark {
+    background-color: black;
+    border: 2px whitesmoke solid;
+    
+}
+
+#extrasContainer {
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#darkMode {
+    width: 80px;
+    cursor: pointer;
+}
+ #darkMode:hover {
+    text-decoration: underline;
+}
+
+#manualLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+#manualLink:hover {
+    text-decoration: underline;
+}
 
 /* COLOR SELECTION STYLING */
 .colorSelect{
@@ -57,7 +86,7 @@
 }
 
 /* MANUAL PAGE STYLING */
-body .dark{
+body.dark{
     background-color: black;
     color: whitesmoke;
 }

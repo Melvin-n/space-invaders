@@ -17,7 +17,7 @@
         <div id='gameScreen'>
             <canvas id='canvas' class='hidden' width='500' height='350'></canvas>
             
-            <div id='colorHeader'>Select the colour of your ship</div>
+            <div id='colorHeader'>Select the colour of your ship to start</div>
             <div id='colors'>
                 <div class='colorSelect' id='firebrick'></div>
                 <div class='colorSelect' id='cadetblue'></div>
@@ -25,10 +25,12 @@
                 <div class='colorSelect' id='gold'></div>
             </div>
         </div>
-    </container>
-    <a href='manual.html'><div id='manualButton'>Game Manual</div></a>
-    <script src='startMenu.js'></script>
-
+        <div id='extrasContainer'>
+            <a id='manualLink' href='manual.html'><div id='manualButton'>Game Manual</div></a>
+            <div id='darkMode' onclick='darkMode()'>Light Mode</div>        
+        </div>
+    </div>
+    
     <script src='spaceInvaders.js'></script>
 </body>
 </html>
